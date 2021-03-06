@@ -23,6 +23,11 @@ func GenerateTableFromJSONFileName(fileName string) (resultTable table.ByteItemT
 	jsonTable := GetJSONLoader()
 
 	err = jsonTable.LoadFromFileName(fileName)
+	if err != nil{
+		return resultTable, err
+	}
+
+	resultTable, err = jsonTable.GenerateTable()
 
 	return resultTable, err
 }
