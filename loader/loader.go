@@ -7,5 +7,5 @@ import (
 type Loader interface {
 	LoadFromFileName(fileName string) (err error)
 	LoadFromString(query string) (err error)
-	ToTable() (resultTable table.FullWidthByteTable, err error)
+	GenerateTable() (resultTable table.ByteItemTable, err error)
 }

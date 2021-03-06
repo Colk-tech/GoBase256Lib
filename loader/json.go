@@ -7,8 +7,8 @@ import (
 )
 
 type JsonPare struct {
-	Index int    `json:"Index"`
-	Value string `json:"Value"`
+	Index int    `json:"index"`
+	Word  string `json:"value"`
 }
 
 type JsonTable struct {
@@ -18,6 +18,14 @@ type JsonTable struct {
 
 func GetJSONLoader() JsonTable {
 	return JsonTable{}
+}
+
+func GenerateTableFromJSONFileName(fileName string) (resultTable table.ByteItemTable, err error) {
+	jsonTable := GetJSONLoader()
+
+	err = jsonTable.LoadFromFileName(fileName)
+
+	return resultTable, err
 }
 
 func (jsTable *JsonTable) LoadFromString(jsonStr string) (err error) {
@@ -37,23 +45,23 @@ func (jsTable *JsonTable) LoadFromFileName(fileName string) (err error) {
 	return err
 }
 
-func (jsTable *JsonTable) ToTable() (resultTable table.FullWidthByteTable, err error) {
+func (jsTable *JsonTable) GenerateTable() (resultTable table.ByteItemTable, err error) {
 	resultTable.NullExpression, err = utils.StrToRune(jsTable.NullExpression)
 	if err != nil {
 		return resultTable, err
 	}
 
-	var composing []table.FullWidthBytePare
+	var composing []table.ByteItem
 
-	for _, value := range jsTable.Contents {
-		val, err := utils.StrToRune(value.Value)
+	for _, item := range jsTable.Contents {
+		word, err := utils.StrToRune(item.Word)
 		if err != nil {
 			return resultTable, err
 		}
 
-		composing = append(composing, table.FullWidthBytePare{
-			Index: value.Index,
-			Value: val,
+		composing = append(composing, table.ByteItem{
+			Index: item.Index,
+			Word:  word,
 		})
 
 	}

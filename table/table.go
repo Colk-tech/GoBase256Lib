@@ -7,18 +7,18 @@ import (
 	"github.com/Colk-tech/GoBase256Lib/utils"
 )
 
-type FullWidthBytePare struct {
+type ByteItem struct {
 	Index int
-	Value rune
+	Word  rune
 }
 
-type FullWidthByteTable struct {
-	Contents       []FullWidthBytePare
+type ByteItemTable struct {
+	Contents       []ByteItem
 	KeyMap         map[uint8]rune
 	NullExpression rune
 }
 
-func (table FullWidthByteTable) Validate() (err error){
+func (table ByteItemTable) Validate() (err error){
 	nullRune, _ := utils.StrToRune("")
 	lengthOfArray := len(table.Contents)
 
@@ -33,7 +33,7 @@ func (table FullWidthByteTable) Validate() (err error){
 	}
 
 	for i, value := range table.Contents {
-		if value.Value == nullRune {
+		if value.Word == nullRune {
 			err = fmt.Errorf("error: incorrect nil entry found at %d", i)
 		}
 
@@ -45,11 +45,11 @@ func (table FullWidthByteTable) Validate() (err error){
 	return err
 }
 
-func (table *FullWidthByteTable) CreateMap() () {
+func (table *ByteItemTable) CreateMap() () {
 	creatingMap := map[uint8]rune{}
 
 	for _, pare := range table.Contents {
-		creatingMap[uint8(pare.Index)] = pare.Value
+		creatingMap[uint8(pare.Index)] = pare.Word
 	}
 
 	table.KeyMap = creatingMap
