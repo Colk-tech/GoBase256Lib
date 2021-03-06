@@ -16,6 +16,10 @@ type JsonTable struct {
 	NullExpression string     `json:"null"`
 }
 
+func GetJSONLoader() JsonTable {
+	return JsonTable{}
+}
+
 func (jsTable *JsonTable) LoadFromString(jsonStr string) (err error) {
 	err = json.Unmarshal([]byte(jsonStr), jsTable)
 	return err
@@ -55,7 +59,9 @@ func (jsTable *JsonTable) ToTable() (resultTable table.FullWidthByteTable, err e
 	}
 
 	resultTable.Contents = composing
+	resultTable.CreateMap()
 
+	err = resultTable.Validate()
 	if err != nil {
 		return resultTable, err
 	}
