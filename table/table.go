@@ -1,6 +1,7 @@
 package table
 
 import (
+	"errors"
 	"fmt"
 	"github.com/Colk-tech/GoBase256Lib/config"
 	"github.com/Colk-tech/GoBase256Lib/utils"
@@ -13,12 +14,17 @@ type FullWidthBytePare struct {
 
 type FullWidthByteTable struct {
 	Contents       []FullWidthBytePare
+	KeyMap         map[uint8]rune
 	NullExpression rune
 }
 
 func (table FullWidthByteTable) Validate() (err error){
 	nullRune, _ := utils.StrToRune("")
 	lengthOfArray := len(table.Contents)
+
+	if len(table.KeyMap) != config.NumberOfWords {
+		err = errors.New("error: KeyMap is not set")
+	}
 
 	if lengthOfArray != config.NumberOfWords {
 		err = fmt.Errorf(
@@ -37,4 +43,14 @@ func (table FullWidthByteTable) Validate() (err error){
 	}
 
 	return err
+}
+
+func (table *FullWidthByteTable) CreateMap() () {
+	creatingMap := map[uint8]rune{}
+
+	for _, pare := range table.Contents {
+		creatingMap[uint8(pare.Index)] = pare.Value
+	}
+
+	table.KeyMap = creatingMap
 }
