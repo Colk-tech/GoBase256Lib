@@ -13,7 +13,6 @@ type JsonPare struct {
 
 type JsonTable struct {
 	Contents       []JsonPare `json:"table"`
-	NullExpression string     `json:"null"`
 }
 
 func GetJSONLoader() JsonTable {
@@ -46,11 +45,6 @@ func (jsTable *JsonTable) LoadFromFileName(fileName string) (err error) {
 }
 
 func (jsTable *JsonTable) GenerateTable() (resultTable table.ByteItemTable, err error) {
-	resultTable.NullExpression, err = utils.StrToRune(jsTable.NullExpression)
-	if err != nil {
-		return resultTable, err
-	}
-
 	var composing []table.ByteItem
 
 	for _, item := range jsTable.Contents {

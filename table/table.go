@@ -15,7 +15,6 @@ type ByteItem struct {
 type ByteItemTable struct {
 	Contents       []ByteItem
 	KeyMap         map[uint8]rune
-	NullExpression rune
 }
 
 func (table ByteItemTable) Validate() (err error){
